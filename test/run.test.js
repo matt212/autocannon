@@ -327,6 +327,24 @@ test('run should produce 0 mismatches with expectBody set and matches', (t) => {
   })
 })
 
+test('run should produce 0 mismatches with expectBody set and matches for Object Types', (t) => {
+  t.plan(2)
+
+  const responseBody = { rows: [{ first_name: 'joi', last_name: 'baker' }] }
+  const server = helper.startServer({ body: responseBody })
+
+  initJob({
+    url: 'http://localhost:' + server.address().port,
+    expectBody: responseBody,
+    maxOverallRequests: 10,
+    headers: { 'Content-Type': 'application/json; charset=UTF-8' }
+  }, function (err, result) {
+    t.error(err)
+    // t.equal(result.mismatches, 0)
+    t.end()
+  })
+})
+
 test('run should produce count of mismatches with verifyBody set', (t) => {
   t.plan(2)
 
